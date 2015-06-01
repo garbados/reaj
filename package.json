@@ -1,0 +1,34 @@
+{
+  "name": "reaj",
+  "version": "0.0.1",
+  "description": "A game for AI",
+  "main": "index.js",
+  "scripts": {
+    "test": "jshint bin lib test && mocha -R spec --recursive",
+    "cov": "mkdir doc; jscoverage lib lib-cov && COVERAGE=true mocha -R html-cov --recursive > doc/coverage.html",
+    "coveralls": "COVERAGE=true mocha -R mocha-lcov-reporter --recursive | coveralls",
+    "doc": "jsdoc -r lib -d doc -R readme.md",
+    "start": "./bin/play",
+    "todo": "grep TODO -r bin lib test readme.md"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/garbados/reaj.git"
+  },
+  "author": "Diana Thayer <garbados@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/garbados/reaj/issues"
+  },
+  "homepage": "https://github.com/garbados/reaj#readme",
+  "devDependencies": {
+    "coveralls": "^2.11.2",
+    "jscoverage": "^0.5.9",
+    "jsdoc": "^3.3.0",
+    "jshint": "^2.8.0",
+    "mocha": "^2.2.5"
+  },
+  "dependencies": {
+    "underscore": "^1.8.3"
+  }
+}
