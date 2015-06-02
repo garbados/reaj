@@ -1,5 +1,8 @@
 # Reaj
 
+[![Build Status](https://travis-ci.org/garbados/reaj.svg?branch=master)](https://travis-ci.org/garbados/reaj)
+[![Coverage Status](https://coveralls.io/repos/garbados/reaj/badge.svg)](https://coveralls.io/r/garbados/reaj)
+
 A game for AI.
 
 ## Rules

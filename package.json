@@ -9,7 +9,8 @@
     "coveralls": "COVERAGE=true mocha -R mocha-lcov-reporter --recursive | coveralls",
     "doc": "jsdoc -r lib -d doc -R readme.md",
     "start": "./bin/play",
-    "todo": "grep TODO -r bin lib test readme.md"
+    "todo": "grep TODO -r bin lib test readme.md",
+    "deploy": "npm run doc && npm run cov && ./bin/deploy"
   },
   "repository": {
     "type": "git",

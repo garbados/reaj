@@ -1,4 +1,12 @@
 language: node_js
 node_js:
+- iojs
 - '0.11'
 - '0.10'
+env:
+  global:
+  - GH_REF: github.com/garbados/reaj.git
+  - secure: eLOWVq6rGf6fS6qxoNaITqch3NnfF5q+0UV4gVqMqEVht7eNIi3+U2WdTa9ZQmFswmx5q1l0cbm+g1Hqg1kCPgLjVPtKWHMYxZT/iRrpfsbvvgqoThjFQ29L/Iq3OthMXYknxp3YccU2GuyqUEWc+/QlW/gQNd+FkSv4B1B0UeCRw486soFY8UuQM+SjWTk3qPmc5gZzGlTtqSzUYjjdPWqhB99k1JrHerH/NWf3cQs7CqvSQ+01E/CLNgapls6GmYZbx1SK13RJ50wzeyJfEyxV7XrbCQKsqbcEZClFKpSD703YiBUTIoSHNbZqJACeUrx/ZwaGcYcr66f3PcLpLW42C3MaERPiRbWCyLd2h4BkAvL8i/9zMUVzYoF01SUouNbZ+64Rvc1dYhikjCuPxJva6gMdHUXBNEmoMt5M2xHWfkWz99L8T4i92RlgqJe2lDaPbI1mN9nLy1wXmoPZzQTlukV8u3p6P7i+fLppLXQ5890rP6gvqkcFl+e2V4rGWeo4Yw9R4bP18Oa7XS6e4GWxBmTjFDpiA/xjLNmJ1pQ+6u5hqkby4lf+UP72IuHiP8DfIoJfTtqrktiddlyyAyQMVB/SiUF694Q+GG3mdVHCkVQ9l7QDzwLup+kwkZhkts81XruYWDEflXsa+0yQZrnst+xK81EpLSSSHF+cgDs=
+after_success:
+- npm run deploy
+- npm run coveralls
