@@ -7,9 +7,11 @@ A game for AI.
 
 ## Rules
 
-Each player exists in a shared environment of limited renewing resources, such as Land, Ecology, and Resources. Each turn, each player chooses a Value, which modifies the world based on the state of that player's Society. At the end of each turn, each Society consumes Resources, first from their local stores, then from the shared environment. Choosing some Values increases how many Resources you consume; others reduce that number.
+Each player directs a society in a shared environment of limited renewing resources, such as land, ecology, and resources. Each turn, given only the state of the environment, their own society, and the relations between all societies, each player chooses an action, which modifies the world based on the state of that player's society and the choices of the other players. At the end of each turn, each society consumes resources; if they lack sufficient resources, they die. Choosing some values increases how many resources you consume; others reduce that number.
 
-At the end of 100 turns, each player receives a score according to the state of their society. The highest score wins.
+Players win if their society survives 100 turns. 
+
+(In this way, player strategies can then be profiled based not only on whether they survived, but also on how they affected the survival of other societies.)
 
 ### Environment
 
@@ -21,7 +23,7 @@ At the end of 100 turns, each player receives a score according to the state of 
 }
 ```
 
-`land` decreases as societies expand into it. `ecology` decreases as societies develop their environment, and increases as societies adapt to their environment. `resources` increases at the beginning of each turn by the environment's `ecology`.
+`land` decreases as societies expand into it. `ecology` decreases as societies develop their environment, and increases as societies adapt to their environment. `resources` increases at the beginning of each turn by the environment's `ecology`, but returns to 0 when players choose to exchange the fruits of their environment.
 
 ### Society
 
@@ -29,16 +31,12 @@ At the end of 100 turns, each player receives a score according to the state of 
 {
     resources: Number,
     values: {
-        conquer: Number,    // values increase by 1
-        exchange: Number,   // every time they're chosen
-        ...
+        conquer: Number,    // values start at 0
+        exchange: Number,   // and increase by 1
+        expand: Number,     // every time they're chosen
     },
     index: Number, // the index of your society 
                    // in the `relations` matrix
-    relations: [
-        ... // [i][j] matrix of all societies and their
-            // dispositions towards one another as integers.
-    ]
 }
 ```
 
@@ -46,31 +44,33 @@ At the end of each turn, a society's `resources` change according to this formul
 
     resources += values.adapt - (values.expand + values.develop)
 
-If a society's `resources` becomes negative, it draws from the environment's resources until it is non-negative. If the environment has fewer resources than the society needs, that society dies. Dead societies do not make choices each turn, and are no longer affected by other societies, but their score is still calculated at the end of the game.
+If a society's `resources` becomes negative, it dies. Dead societies do not make choices each turn, and are no longer affected by the consequences of any choices.
+
+### Relations
+
+```javascript
+// a relations matrix for 5 players
+[
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0],
+]
+```
+
+Relations between societies are represented as a 2-dimensional square matrix, where society N's dispositions toward other societies are contained in row N, while column N indicates how other societies feel about it.
+
+Each player is given the index of their society, and knows by the size of the matrix the number of other players.
 
 ### Values
 
-* Conquer: gain 1 resource for every society with less `conquer` than you, and decrease every disposition toward you by 1.
-* Exchange: gain 1 resource for every society with a positive disposition toward you.
-* Expand: decreases environmental `land` by 1 and gain 3 resources.
-* Develop: decrease environmental `ecology` by 1 and gain 3 resources.
-* Consent: increase dispositions toward you by 1.
-* Adapt: increase environmental `ecology` by 1.
-
-### Score
-
-    // for each society
-    score = resources + relations.map(function (rel, i) {
-            if (i === index) {
-                return 0;
-            } else {
-                return Math.max(0, rel[index]);
-            }
-        }).reduce(function (a, b) {
-            return a + b;
-        });
-
-In this way, even dead societies without resources can still compete in the rankings by being positively remembered. Negative dispositions do not impact score.
+* Conquer: gain 1 resource for every society with less `conquer` than you, while they lose 1 resource. Decrease every disposition toward you by 1. (minority game)
+* Exchange: gain X resources, where X is the environment's resources divided by the number of players that chose to exchange this turn. Sets the environment's resources to 0. (centipede game)
+* Expand: decrease the environment's land by X, where X is the number of societies who chose to expand this turn. Then, gain Y resources, where Y is the environment's remaining land. (discoordination game)
+* Develop: decrease the environment's ecology by X, where X is the number of societies who chose to develop this turn. Then, gain Y resources, where Y is the number of times your society has chosen to develop. If the environment's ecology is less than 0, all societies lose N resources, where N is the number of players. (discoordination game, tragedy of the commons)
+* Cooperate: increase all dispositions toward you by 1, then gain X resources, where X is the number of societies that chose to cooperate this turn. If X is 0, all societies lose N resources, where N is the number of players. (volunteer's dilemma and coordination game)
+* Adapt: increase environmental `ecology` by 1. (turtle, volunteer's dilemma)
 
 ## How to Play (TODO)
 
