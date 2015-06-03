@@ -7,11 +7,11 @@ A game for AI.
 
 ## Rules
 
-Each player directs a society in a shared environment of limited renewing resources, such as land, ecology, and resources. Each turn, given only the state of the environment, their own society, and the relations between all societies, each player chooses an action, which modifies the world based on the state of that player's society and the choices of the other players. At the end of each turn, each society consumes resources; if they lack sufficient resources, they die. Choosing some values increases how many resources you consume; others reduce that number.
+Each player directs a society in a shared environment of limited renewing resources, such as land, ecology, and resources. Each turn, given only the state of the environment, their own society, and the relations between all societies, each player chooses an action, which modifies the environment based on the state of that player's society and the choices of the other players. At the end of each turn, each society consumes resources; if they lack sufficient resources, they die. Some choices increase how many resources you consume; others reduce that number.
 
 Players win if their society survives 100 turns. 
 
-(In this way, player strategies can then be profiled based not only on whether they survived, but also on how they affected the survival of other societies.)
+(In this way, strategies can be profiled based not only on whether their society survives, but also on how they affect the survival of other societies.)
 
 ### Environment
 
@@ -44,7 +44,7 @@ At the end of each turn, a society's `resources` change according to this formul
 
     resources += values.adapt - (values.expand + values.develop)
 
-If a society's `resources` becomes negative, it dies. Dead societies do not make choices each turn, and are no longer affected by the consequences of any choices.
+If a society's resources go negative, that society dies. Dead societies do not make choices each turn, and are no longer affected by the consequences of any choices.
 
 ### Relations
 
@@ -63,7 +63,7 @@ Relations between societies are represented as a 2-dimensional square matrix, wh
 
 Each player is given the index of their society, and knows by the size of the matrix the number of other players.
 
-### Values
+### Choices
 
 * Conquer: gain 1 resource for every society with less `conquer` than you, while they lose 1 resource. Decrease every disposition toward you by 1. (minority game)
 * Exchange: gain X resources, where X is the environment's resources divided by the number of players that chose to exchange this turn. Sets the environment's resources to 0. (centipede game)
