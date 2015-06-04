@@ -4,7 +4,7 @@
   "description": "A game for AI",
   "main": "index.js",
   "scripts": {
-    "test": "jshint bin lib test && mocha -R spec --recursive",
+    "test": "jshint bin lib test strategies && mocha -R spec --recursive",
     "cov": "mkdir doc; jscoverage lib lib-cov && COVERAGE=true mocha -R html-cov --recursive > doc/coverage.html",
     "coveralls": "COVERAGE=true mocha -R mocha-lcov-reporter --recursive | coveralls",
     "doc": "jsdoc -r lib -d doc -R readme.md",

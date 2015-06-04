@@ -5,9 +5,11 @@ if (process.env.COVERAGE)
 else
   lib = require('../lib');
 
-var PLAYERS = [
-  /* TODO test with actual players */
-];
+var strategies = require('../strategies');
+var PLAYERS = [];
+Object.keys(strategies).forEach(function (key) {
+  PLAYERS.push(strategies[key]);
+});
 
 describe('reaj', function () {
   describe('environment', function () {
@@ -85,7 +87,12 @@ describe('reaj', function () {
 
   describe('turn', function () {
     before(function () {
-      this.turn = new lib.Turn(PLAYERS);
+      // initialize the players
+      // because normally the game itself would
+      var player_objects = PLAYERS.map(function (P) {
+        return new P();
+      });
+      this.turn = new lib.Turn(player_objects);
     });
 
     it('should process the consequences of this turn and return the next', function () {
