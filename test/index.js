@@ -5,11 +5,11 @@ else
   lib = require('../lib');
 
 describe('reaj', function () {
-  describe('environment', function () {});
-  describe('society', function () {});
-  describe('choices', function () {});
-  describe('player', function () {});
-  describe('turn', function () {});
-  describe('game', function () {});
-  describe('tournament', function () {});
+  describe('environment', function () { /* TODO */ });
+  describe('society', function () { /* TODO */ });
+  describe('choices', function () { /* TODO */ });
+  describe('player', function () { /* TODO */ });
+  describe('turn', function () { /* TODO */ });
+  describe('game', function () { /* TODO */ });
+  describe('tournament', function () { /* TODO */ });
 });
