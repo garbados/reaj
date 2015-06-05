@@ -31,6 +31,7 @@
     "mocha-lcov-reporter": "0.0.2"
   },
   "dependencies": {
+    "brain": "^0.7.0",
     "clone": "^1.0.2",
     "underscore": "^1.8.3",
     "yargs": "^3.10.0"

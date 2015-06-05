@@ -1,18 +1,57 @@
 #!/usr/bin/env node
 var _ = require('underscore');
+var fs = require('fs');
 var lib = require('../lib');
 var strategies = require('../strategies');
 var argv = require('yargs')
           .usage('Usage: $0 [options]')
-          .demand('r')
           .alias('r', 'rounds')
           .describe('r', 'Number of rounds to play')
-          .demand('a')
+          .default('r', 5)
           .alias('a', 'appearances')
-          .describe('r', )
+          .describe('a', 'Number of appearances per player throughout the tournament')
+          .default('a', 5)
+          .alias('n', 'duration')
+          .describe('n', 'Sets both `rounds` and `appearances`')
+          .alias('o', 'output')
+          .describe('o', 'File to output detailed tournament results to, as JSON.')
+          .help('h')
+          .alias('h', 'help')
           .argv;
 
 var players = _.values(strategies);
-var tourney = new lib.Tournament(players, 5, 5);
+var tourney = new lib.Tournament(players, argv.duration || argv.rounds, argv.duration || argv.appearances);
 var result = tourney.play();
-console.log(JSON.stringify(result, undefined, 2));
+
+console.log('WINNERS OF EACH ROUND');
+var winners = _.pluck(result, 'winners');
+console.log(winners);
+console.log('# TIMES WON');
+console.log(_.chain(winners).flatten().countBy().value());
+
+if (argv.output) {
+  var triplets = get_triplets_for_brain(result);
+  _.flatten(triplets).forEach(function (triplet) {
+    fs.appendFileSync(argv.output, JSON.stringify(triplet) + '\n');
+  });
+}
+
+function get_triplets_for_brain (result) {
+  return result.map(function (round) {
+    return round.history.map(function (turn) {
+      var players = _.pluck(turn.players, 'name');
+      var environment = turn.environment;
+      var relations = turn.relations;
+      return turn.societies
+      .filter(function (society) {
+        return society.isAlive();
+      })
+      .map(function (society) {
+        return {
+          input: [environment.json(), society.json(), relations],
+          output: turn.choices[society.index()]
+        }
+      });
+    });
+  });
+}
