@@ -11,6 +11,7 @@ var util = require('util');
 
 function ValuePlayer (choice) {
   this.choice = choice;
+  this.name = choice;
   return Player.call(this);
 }
 

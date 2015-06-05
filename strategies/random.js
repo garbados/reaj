@@ -11,6 +11,7 @@ regardless of environmental or societal state.
 @implements Player
 */
 function RandomPlayer () {
+  this.name = 'random';
   return Player.call(this);
 }
 
