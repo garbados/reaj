@@ -108,7 +108,7 @@ describe('reaj', function () {
 
     it('should play a game and report statistics such as winners', function () {
       var outcome = this.game.play();
-      assert('reports' in outcome);
+      assert('history' in outcome);
       assert('winners' in outcome);
     });
   });
