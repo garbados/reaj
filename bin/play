@@ -1,2 +1,18 @@
 #!/usr/bin/env node
-var lib = require('..');
+var _ = require('underscore');
+var lib = require('../lib');
+var strategies = require('../strategies');
+var argv = require('yargs')
+          .usage('Usage: $0 [options]')
+          .demand('r')
+          .alias('r', 'rounds')
+          .describe('r', 'Number of rounds to play')
+          .demand('a')
+          .alias('a', 'appearances')
+          .describe('r', )
+          .argv;
+
+var players = _.values(strategies);
+var tourney = new lib.Tournament(players, 5, 5);
+var result = tourney.play();
+console.log(JSON.stringify(result, undefined, 2));
