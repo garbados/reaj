@@ -1,5 +1,7 @@
+var _ = require('underscore');
 var brain = require('brain');
 var fs = require('fs');
+var Choices = require('../lib/choices');
 var Player = require('../lib/player');
 var util = require('util');
 
@@ -13,19 +15,69 @@ var util = require('util');
 @class
 */
 function BrainPlayer () {
+  var self = this;
   this.name = 'brain';
   this.brain = new brain.NeuralNetwork();
-  // TODO training phase
-  // brain only handles values between 0 and 1
-  // so reduce `land` and `ecology` etc to fractions
-  // ex {input: [environment, society, relations], output:choice}
   return Player.call(this);
 }
 
 util.inherits(BrainPlayer, Player);
 
+BrainPlayer.prototype.train = function (training_file_path, brain_file_path) {
+  var training_data = fs.readFileSync(training_file_path)
+    .toString()
+    .split('\n')
+    .slice(0, -1)
+    .map(JSON.parse)
+    .map(this.format.bind(self));
+  this.brain.train(training_data);
+  var json = this.brain.toJSON();
+  fs.writeFileSync(brain_file_path, JSON.stringify(json));
+};
+
+BrainPlayer.prototype.restore = function (brain_file_path) {
+  var text = fs.readFileSync(brain_file_path).toString();
+  var json = JSON.parse(text);
+  this.brain.fromJSON(json);
+};
+
+BrainPlayer.prototype.format = function (data) {
+  return {
+    input: this.format_input.apply(null, data.input),
+    output: this.format_output.call(null, data.output)
+  };
+};
+
+BrainPlayer.prototype.format_input = function (environment, society, relations) {
+  return _.flatten([
+    environment.land,
+    environment.ecology,
+    environment.resources,
+    society.resources,
+    society.index,
+    _.values(society.values),
+    relations
+  ]).map(function (from, to, x) { 
+    return to[0] + (x - from[0]) * (to[1] - to[0]) / (from[1] - from[0]);
+  }.bind(null, [-1000, 1000], [0, 1]));
+};
+
+BrainPlayer.prototype.format_output = function (choice) {
+  return [Choices.ALL.indexOf(choice) / (Choices.ALL.length - 1)];
+};
+
+BrainPlayer.prototype.parse_output = function (output) {
+  var choice_index = Math.floor(output * (Choices.ALL.length - 1));
+  console.log(output);
+  var choice = Choices.ALL[choice_index];
+  return choice[0];
+};
+
 BrainPlayer.prototype.choose = function (environment, society, relations) {
-  return this.brain.run([environment, society, relations]);
+  var input = this.format_input(environment, society, relations);
+  console.log(input);
+  var output = this.brain.run(input);
+  return this.parse_output(output);
 };
 
 module.exports = BrainPlayer;
