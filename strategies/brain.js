@@ -1,4 +1,3 @@
-var LineByLineReader = require('line-by-line');
 var _ = require('underscore');
 var brain = require('brain');
 var fs = require('fs');

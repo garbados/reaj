@@ -33,6 +33,7 @@
   "dependencies": {
     "brain": "^0.7.0",
     "clone": "^1.0.2",
+    "convnetjs": "^0.3.0",
     "underscore": "^1.8.3",
     "yargs": "^3.10.0"
   }
