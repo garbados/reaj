@@ -31,27 +31,31 @@ console.log(_.chain(winners).flatten().countBy().value());
 
 if (argv.output) {
   var triplets = get_triplets_for_brain(result);
-  _.flatten(triplets).forEach(function (triplet) {
-    fs.appendFileSync(argv.output, JSON.stringify(triplet) + '\n');
-  });
+  fs.writeFileSync(argv.output, JSON.stringify(_.flatten(triplets), undefined, 2));
 }
 
 function get_triplets_for_brain (result) {
-  return result.map(function (round) {
-    return round.history.map(function (turn) {
-      var players = _.pluck(turn.players, 'name');
-      var environment = turn.environment;
-      var relations = turn.relations;
-      return turn.societies
-      .filter(function (society) {
-        return society.isAlive();
-      })
-      .map(function (society) {
-        return {
-          input: [environment.json(), society.json(), relations],
-          output: turn.choices[society.index()]
-        }
-      });
+  function map_history (turn) {
+    var players = _.pluck(turn.players, 'name');
+    var environment = turn.environment;
+    var relations = turn.relations;
+
+    return turn.societies
+    .filter(function (society) {
+      return society.isAlive();
+    })
+    .map(function (society) {
+      return {
+        input: [environment.json(), society.json(), relations],
+        output: turn.choices[society.index()]
+      }
     });
+  }
+
+  return result.map(function (round) {
+    return [
+      map_history(round.history[0]),
+      map_history(round.history.slice(-1)[0])
+    ];
   });
 }
