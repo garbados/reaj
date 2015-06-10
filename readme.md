@@ -9,7 +9,7 @@ A game for AI.
 
 Each player directs a society in a shared environment of limited renewing resources, such as land, ecology, and resources. Each turn, given only the state of the environment, their own society, and the relations between all societies, each player chooses an action, which modifies the environment based on the state of that player's society and the choices of the other players. At the end of each turn, each society consumes resources; if they lack sufficient resources, they die. Some choices increase how many resources you consume; others reduce that number.
 
-Players win if their society survives 100 turns. 
+Players win if their society survives 100 turns.
 
 (In this way, strategies can be profiled based not only on whether their society survives, but also on how they affect the survival of other societies.)
 
