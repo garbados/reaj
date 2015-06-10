@@ -15,12 +15,20 @@ var argv = require('yargs')
           .describe('n', 'Sets both `rounds` and `appearances`')
           .alias('o', 'output')
           .describe('o', 'File to output detailed tournament results to, as JSON.')
+          .alias('i', 'interactive')
+          .describe('i', 'Adds a human player controlled by prompting the user over stdin.')
           .help('h')
           .alias('h', 'help')
           .argv;
 
+if (!argv.interactive) delete strategies.human;
 var players = _.values(strategies);
-var tourney = new lib.Tournament(players, argv.duration || argv.rounds, argv.duration || argv.appearances);
+
+var tourney;
+if (argv.interactive)
+  tourney = new lib.Tournament(players, 1, 1);
+else
+  tourney = new lib.Tournament(players, argv.duration || argv.rounds, argv.duration || argv.appearances);
 var result = tourney.play();
 
 console.log('WINNERS OF EACH ROUND');

@@ -8,7 +8,9 @@ else
 var strategies = require('../strategies');
 var PLAYERS = [];
 Object.keys(strategies).forEach(function (key) {
-  PLAYERS.push(strategies[key]);
+  // don't add the human player
+  if (key !== 'human')
+    PLAYERS.push(strategies[key]);
 });
 
 describe('reaj', function () {

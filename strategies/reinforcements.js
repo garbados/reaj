@@ -10,6 +10,7 @@ var util = require('util');
 calculates change in societal resources turn over turn,
 using that delta as the "reward" which trains behavior.
 
+@todo store learning so it can learn across games
 @class
 */
 function ReinforcementPlayer () {

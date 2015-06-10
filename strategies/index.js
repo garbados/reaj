@@ -7,5 +7,6 @@ strategies.random = require('./random');
 // strategies.brain = require('./brain');
 strategies.reinforcements = require('./reinforcements');
 strategies.nerd = require('./nerd');
+strategies.human = require('./repl');
 
 module.exports = strategies;

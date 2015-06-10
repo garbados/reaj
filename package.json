@@ -32,8 +32,10 @@
   },
   "dependencies": {
     "brain": "^0.7.0",
+    "cli-table": "^0.3.1",
     "clone": "^1.0.2",
     "convnetjs": "^0.3.0",
+    "readline-sync": "^1.2.17",
     "underscore": "^1.8.3",
     "yargs": "^3.10.0"
   }
