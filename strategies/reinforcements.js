@@ -1,5 +1,5 @@
 var _ = require('underscore');
-var deepqlearn = require('convnetjs').deepqlearn;
+var Brain = require('convnetjs').deepqlearn.Brain;
 var fs = require('fs');
 var Choices = require('../lib/choices');
 var Player = require('../lib/player');
@@ -32,12 +32,6 @@ ReinforcementPlayer.extend = function (filepath) {
   return NewReinforcementPlayer;
 };
 
-ReinforcementPlayer.prototype.restore = function (brain_file_path) {
-  var text = fs.readFileSync(brain_file_path).toString();
-  var json = JSON.parse(text);
-  this.brain.fromJSON(json);
-};
-
 ReinforcementPlayer.prototype.format_input = function (environment, society, relations) {
   return _.flatten([
     environment.land,
@@ -60,7 +54,7 @@ ReinforcementPlayer.prototype.choose = function (environment, society, relations
   var input = this.format_input(environment, society, relations);
   if (this.brain === undefined) {
     // initialize brain
-    this.brain = new deepqlearn.Brain(input.length, Choices.ALL.length);
+    this.brain = new Brain(input.length, Choices.ALL.length);
   } else {
     // learn from result of last action
     var reward = society.resources - this.last_turn_resources;
