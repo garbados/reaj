@@ -9,6 +9,7 @@ var Table = require('cli-table');
 var lib = require('..');
 
 function HumanPlayer () {
+  this.name = 'human';
   this.turn = 0;
   return lib.Player.call(this);
 }
@@ -37,11 +38,18 @@ HumanPlayer.prototype.choose = function (environment, society, relations) {
     row[i] = _.pluck(relations, i);
     relations_table.push(row);
   });
-  console.log(relations_table.toString());
 
   console.log('How will your society act?');
-  var choice_index = readlineSync.keyInSelect(lib.Choices.ALL);
-  if (choice_index === -1) return process.exit();
+  var choice_index = readlineSync.keyInSelect(lib.Choices.ALL.concat(["Show relations matrix"]));
+  // show relations matrix only if asked
+  if (choice_index === lib.Choices.ALL.length) {
+    console.log(relations_table.toString());
+    choice_index = readlineSync.keyInSelect(lib.Choices.ALL);
+  }
+  // quit if asked
+  if (choice_index === -1) {
+    return process.exit();
+  }
   var choice = lib.Choices.ALL[choice_index];
   return choice;
 };

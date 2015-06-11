@@ -31,11 +31,13 @@ else
   tourney = new lib.Tournament(players, argv.duration || argv.rounds, argv.duration || argv.appearances);
 var result = tourney.play();
 
-console.log('WINNERS OF EACH ROUND');
+console.log('WINNERS');
 var winners = _.pluck(result, 'winners');
 console.log(winners);
-console.log('# TIMES WON');
-console.log(_.chain(winners).flatten().countBy().value());
+if (winners.length > 1) {
+  console.log('# WON');
+  console.log(_.chain(winners).flatten().countBy().value()); 
+}
 
 if (argv.output) {
   var triplets = get_triplets_for_brain(result);
