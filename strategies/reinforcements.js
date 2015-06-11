@@ -1,5 +1,5 @@
 var _ = require('underscore');
-var deepqlearn = require('../src/deepqlearn');
+var deepqlearn = require('convnetjs').deepqlearn;
 var fs = require('fs');
 var Choices = require('../lib/choices');
 var Player = require('../lib/player');
