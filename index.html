@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Home</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Home</h1>
+
+    
+
+
+
+    
+
+
+    <h3> </h3>
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+    <section>
+        <article><h1>Reaj</h1><p><a href="https://travis-ci.org/garbados/reaj"><img src="https://travis-ci.org/garbados/reaj.svg?branch=master" alt="Build Status"></a>
+<a href="https://coveralls.io/r/garbados/reaj"><img src="https://coveralls.io/repos/garbados/reaj/badge.svg" alt="Coverage Status"></a></p>
+<p>A game for AI.</p>
+<h2>Rules</h2><p>Each player directs a society in a shared environment of limited renewing resources, such as land, ecology, and resources. Each turn, given only the state of the environment, their own society, and the relations between all societies, each player chooses an action, which modifies the environment based on the state of that player's society and the choices of the other players. At the end of each turn, each society consumes resources; if they lack sufficient resources, they die. Some choices increase how many resources you consume; others reduce that number.</p>
+<p>Players win if their society survives 100 turns.</p>
+<p>(In this way, strategies can be profiled based not only on whether their society survives, but also on how they affect the survival of other societies.)</p>
+<h3>Environment</h3><pre class="prettyprint source lang-javascript"><code>{
+    land: Number,
+    ecology: Number,
+    resources: Number
+}</code></pre><p><code>land</code> decreases as societies expand into it. <code>ecology</code> decreases as societies develop their environment, and increases as societies adapt to their environment. <code>resources</code> increases at the beginning of each turn by the environment's <code>ecology</code>, but returns to 0 when players choose to exchange the fruits of their environment.</p>
+<h3>Society</h3><pre class="prettyprint source lang-javascript"><code>{
+    resources: Number,
+    values: {
+        conquer: Number,    // values start at 0
+        exchange: Number,   // and increase by 1
+        expand: Number,     // every time they're chosen
+    },
+    index: Number, // the index of your society 
+                   // in the `relations` matrix
+}</code></pre><p>At the end of each turn, a society's <code>resources</code> change according to this formula:</p>
+<pre class="prettyprint source"><code>resources += values.adapt - (values.expand + values.develop)</code></pre><p>If a society's resources go negative, that society dies. Dead societies do not make choices each turn, and are no longer affected by the consequences of any choices.</p>
+<h3>Relations</h3><pre class="prettyprint source lang-javascript"><code>// a relations matrix for 5 players
+[
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0],
+]</code></pre><p>Relations between societies are represented as a 2-dimensional square matrix, where society N's dispositions toward other societies are contained in row N, while column N indicates how other societies feel about it.</p>
+<p>Each player is given the index of their society, and knows by the size of the matrix the number of other players.</p>
+<h3>Choices</h3><ul>
+<li>Conquer: gain 1 resource for every society with less <code>conquer</code> than you, while they lose 1 resource. Decrease every disposition toward you by 1. (minority game)</li>
+<li>Exchange: gain X resources, where X is the environment's resources divided by the number of players that chose to exchange this turn. Sets the environment's resources to 0. (centipede game)</li>
+<li>Expand: decrease the environment's land by X, where X is the number of societies who chose to expand this turn. Then, gain Y resources, where Y is the environment's remaining land. (discoordination game)</li>
+<li>Develop: decrease the environment's ecology by X, where X is the number of societies who chose to develop this turn. Then, gain Y resources, where Y is the number of times your society has chosen to develop. If the environment's ecology is less than 0, all societies lose N resources, where N is the number of players. (discoordination game, tragedy of the commons)</li>
+<li>Cooperate: increase all dispositions toward you by 1, then gain X resources, where X is the number of societies that chose to cooperate this turn. If X is 0, all societies lose N resources, where N is the number of players. (volunteer's dilemma and coordination game)</li>
+<li>Adapt: increase environmental <code>ecology</code> by 1. (turtle, volunteer's dilemma)</li>
+</ul>
+<h2>How to Play (TODO)</h2><h2>Usage (TODO)</h2><h2>Testing</h2><pre class="prettyprint source"><code>git clone git@github.com:garbados/reaj.git
+cd reaj
+npm install
+npm test</code></pre><h2>License</h2><p><a href="http://opensource.org/licenses/ISC">ISC</a>, yo.</p></article>
+    </section>
+
+
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Choices.html">Choices</a></li><li><a href="Environment.html">Environment</a></li><li><a href="Game.html">Game</a></li><li><a href="Society.html">Society</a></li><li><a href="Tournament.html">Tournament</a></li><li><a href="Turn.html">Turn</a></li></ul><h3>Interfaces</h3><ul><li><a href="Player.html">Player</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.1</a> on Thu Jun 11 2015 16:26:04 GMT+0000 (UTC)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
